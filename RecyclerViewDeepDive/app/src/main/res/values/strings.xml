@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Famous Quotes</string>
+    <string name="action_settings">Settings</string>
+    <string name="header_title">Scroll to see quotes from famous people!</string>
+</resources>
