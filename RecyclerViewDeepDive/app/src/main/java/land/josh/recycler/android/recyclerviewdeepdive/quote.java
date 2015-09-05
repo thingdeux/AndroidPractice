@@ -23,7 +23,7 @@ public class quote {
         return mQuoteText;
     }
 
-    public static ArrayList<quote> quoteGen() {
+    public static ArrayList<quote> quoteGeneration() {
         ArrayList<quote> quotes = new ArrayList<quote>();
         for (int i = 0; i < 200; i++) {
             quotes.add(new quote("Hope is the thing with feathers that perches in the soul - and sings the tunes without the words - and never stops at all.", "Emily Dickinson"));

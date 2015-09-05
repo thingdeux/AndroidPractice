@@ -29,7 +29,7 @@ public class quotesFragment extends Fragment {
         // Items positions on creation of a new viewHolder.
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new quoteRecyclerAdapter(quote.quoteGen());
+        mAdapter = new quoteRecyclerAdapter(quote.quoteGeneration());
         mRecyclerView.setAdapter(mAdapter);
 
         return v;
