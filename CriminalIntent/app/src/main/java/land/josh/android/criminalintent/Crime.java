@@ -2,6 +2,7 @@ package land.josh.android.criminalintent;
 
 import android.text.format.DateFormat;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class Crime {
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
+
 
     public Crime() {
         // Generate unique identifier
@@ -26,6 +28,10 @@ public class Crime {
 
     public void setSolved(boolean solved) {
         mSolved = solved;
+    }
+
+    public void setTime(int hour, int minute) {
+//        mDate.setTime();
     }
 
     public Date getDate() {
