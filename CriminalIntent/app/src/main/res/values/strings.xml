@@ -9,7 +9,17 @@
     <string name="date_picker_title">Date of crime:</string>
     <string name="time_picker_title">Time of crime:</string>
     <string name="new_crime">New Crime</string>
+    <string name="delete_crime">Delete Crime</string>
+    <string name="delete_crime_dialog_verification">Are you sure you want to delete this record?</string>
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
-    <string name="subtitle_format">%1$s crimes</string>
+    <string name="crime_list_empty_title">No crimes have been reported!</string>
+    <string name="crime_list_empty_subtitle">Be the first to report, be vigilant citizen!</string>
+    <string name="crime_list_empty_report_button_text">Report New Crime</string>
+
+    <plurals name="subtitle_plural">
+        <item quantity="one">%1$s crime</item>
+        <item quantity="other">%1$s crimes</item>
+    </plurals>
+
 </resources>

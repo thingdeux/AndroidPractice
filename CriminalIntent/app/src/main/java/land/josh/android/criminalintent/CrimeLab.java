@@ -1,6 +1,7 @@
 package land.josh.android.criminalintent;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,11 @@ public class CrimeLab {
 
     public void addCrime(Crime c) {
         mCrimes.add(c);
+    }
+
+    public void deleteCrime(Crime c) {
+        Log.d("CrimeLab", "Deleting Crime: " + c);
+        mCrimes.remove(c);
     }
 
     private CrimeLab(Context context) {
