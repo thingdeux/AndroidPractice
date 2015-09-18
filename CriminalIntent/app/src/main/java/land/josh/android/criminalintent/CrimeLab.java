@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +40,7 @@ public class CrimeLab {
     public void deleteCrime(UUID id) {
         Log.d("CrimeLab", "Deleting Crime: " + id);
         deleteCrimes(CrimeTable.Cols.UUID + " = ?",
-                new String[] { id.toString() });
+                new String[]{id.toString()});
     }
 
     public void updateCrime(Crime c) {
@@ -88,6 +90,17 @@ public class CrimeLab {
         } finally {
             cursor.close();
         }
+    }
+
+    public File getPhotoFile(Crime crime) {
+        File externalFilesdir = mContext
+                .getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        if (externalFilesdir == null) {
+            return null;
+        }
+
+        return new File(externalFilesdir, crime.getPhotoFilename());
     }
 
     private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
