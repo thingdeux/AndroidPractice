@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class FlickrFetchr {
     private static final String TAG = FlickrFetchr.class.getSimpleName();
-    private static final String API_KEY = "26070ad740fd501c085b5a572284fafc";
+    private static final String API_KEY = "26070ad740fd501c085b5a572284fafc";   // Will Disable API Key before 9/20
     private static final String FLICKR_API_URL = "https://api.flickr.com/services/rest/";
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
