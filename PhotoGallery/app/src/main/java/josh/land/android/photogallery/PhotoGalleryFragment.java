@@ -1,19 +1,21 @@
 package josh.land.android.photogallery;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Gallery;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ public class PhotoGalleryFragment extends Fragment {
     private GridLayoutManager mGridLayoutManager;
     private List<GalleryItem> mItems = new ArrayList<>();
     private ThumbnailDownloader<PhotoHolder> mThumbnailDownloader;
+    private String usersQuery = "";
 
     public static PhotoGalleryFragment newInstance() {
         return new PhotoGalleryFragment();
@@ -43,7 +46,12 @@ public class PhotoGalleryFragment extends Fragment {
     private class FetchItemsTask extends AsyncTask<Void, Void, List<GalleryItem>> {
         @Override
         protected List<GalleryItem> doInBackground(Void... params) {
-            return new FlickrFetchr().fetchItems(current_page);
+            String query = usersQuery;
+            if (query.isEmpty()) {
+                return new FlickrFetchr().fetchRecentPhotos(current_page);
+            } else {
+                return new FlickrFetchr().searchPhotos(query, current_page);
+            }
         }
 
         @Override
@@ -56,25 +64,40 @@ public class PhotoGalleryFragment extends Fragment {
         }
     }
 
-    private class PhotoHolder extends RecyclerView.ViewHolder {
+    private class PhotoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTextOverlay;
         private ImageView mItemImageView;
+        private GalleryItem mItem;
 
         public PhotoHolder(View itemView) {
             super(itemView);
+
+            FrameLayout container = (FrameLayout) itemView.findViewById(R.id.fragment_photo_gallery_container);
+            container.setOnClickListener(this);
+
 
             mItemImageView = (ImageView) itemView
                     .findViewById(R.id.fragment_photo_gallery_image_view);
             mTextOverlay = (TextView) itemView
                     .findViewById(R.id.fragment_photo_gallery_info_overlay);
+
+            mTextOverlay.setOnClickListener(this);
         }
 
         public void bindGalleryItem(GalleryItem item) {
-            mTextOverlay.setText(item.getId().toString());
+            mItem = item;
+            mTextOverlay.setText(item.getId());
             Picasso.with(getActivity())
                     .load(item.getUrl())
                     .placeholder(R.drawable.flickr)
                     .into(mItemImageView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(mItem.getUserUrl()));
+            startActivity(intent);
         }
 
 //        public void bindInfoOverlay(GalleryItem item) {
@@ -115,13 +138,15 @@ public class PhotoGalleryFragment extends Fragment {
         public int getItemCount() {
             return mGalleryItems.size();
         }
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new FetchItemsTask().execute();
+        setHasOptionsMenu(true);
+        updateItems();
 
 //        Handler responseHandler = new Handler();
 //        mThumbnailDownloader = new ThumbnailDownloader<>(responseHandler);
@@ -192,5 +217,38 @@ public class PhotoGalleryFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mThumbnailDownloader.clearQueue();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+        menuInflater.inflate(R.menu.fragment_photo_gallery, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // TODO : Sent user back to position 1 in the recycler view
+                Log.d(TAG, "QueryTextSubmit: " + query);
+                usersQuery = query;
+                updateItems();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d(TAG, "QueryTextChange: " + newText);
+                return false;
+            }
+        });
+    }
+
+    private void updateItems() {
+        current_page = 1;
+        isMakingPaginationCall = false;
+        mItems.clear();
+        new FetchItemsTask().execute();
     }
 }

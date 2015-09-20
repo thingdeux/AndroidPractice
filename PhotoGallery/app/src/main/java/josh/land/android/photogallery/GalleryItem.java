@@ -4,6 +4,7 @@ package josh.land.android.photogallery;
  * Created by josh on 9/19/15.
  */
 public class GalleryItem {
+    private static final String FLICKR_PROFILE_URL = "http://flickr.com/photo.gne?id=";
     private String mCaption;
     private String mId;
     private String mUrl;
@@ -35,5 +36,12 @@ public class GalleryItem {
 
     public void setUrl(String url) {
         mUrl = url;
+    }
+
+    public String getUserUrl() {
+        String[] splitUrl = getUrl().split("/");
+        String filename = splitUrl[splitUrl.length - 1];
+        String userId = filename.split("_")[0];
+        return FLICKR_PROFILE_URL + userId;
     }
 }

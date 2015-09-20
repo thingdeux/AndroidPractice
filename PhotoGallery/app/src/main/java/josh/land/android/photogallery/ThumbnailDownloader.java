@@ -48,19 +48,19 @@ public class ThumbnailDownloader<T> extends HandlerThread {
         }
     }
 
-    @Override
-    protected void onLooperPrepared() {
-        mRequestHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == MESSAGE_DOWNLOAD) {
-                    T target = (T) msg.obj;
-                    Log.i(TAG, "Got a request for URL: " + mRequestMap.get(target));
-                    handleRequest(target);
-                }
-            }
-        };
-    }
+//    @Override
+//    protected void onLooperPrepared() {
+//        mRequestHandler = new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                if (msg.what == MESSAGE_DOWNLOAD) {
+//                    T target = (T) msg.obj;
+//                    Log.i(TAG, "Got a request for URL: " + mRequestMap.get(target));
+//                    handleRequest(target);
+//                }
+//            }
+//        };
+//    }
 
     private void handleRequest(final T target) {
         try {
